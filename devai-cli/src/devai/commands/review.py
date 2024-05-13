@@ -17,6 +17,8 @@ import click
 from devai.util.file_processor import format_files_as_string
 from vertexai.generative_models import GenerativeModel, ChatSession
 from google.cloud.aiplatform import telemetry
+from devai.util.secret_manager import get_access_secret
+
 
 USER_AGENT = 'cloud-solutions/genai-for-developers-v1'
 model_name="gemini-1.5-pro-preview-0409"
@@ -36,23 +38,26 @@ CODE:
 {}
 
 '''
-    qry='''
-INSTRUCTIONS:
-You are an experienced software architect renowned for your ability to identify code quality issues, optimization opportunities, and adherence to best practices. Conduct a thorough code review of the provided codebase with the following focus:
-Key Areas
-Efficiency: Identify performance bottlenecks, redundant operations, or areas where algorithms and data structures could be improved for enhanced speed and resource usage.
-Maintainability: Assess code readability, modularity, and the ease of future changes. Look for overly complex logic, tight coupling, or lack of proper code organization.
-Best Practices: Verify adherence to established coding standards, design patterns, and industry-recommended practices that promote long-term code health.
-Security: Scrutinize the code for potential vulnerabilities like improper input validation, susceptibility to injection attacks, or weaknesses in data handling.
-Output Guidance
-Structure:  Organize your findings by class and method names. This provides clear context for the issues and aids in refactoring. 
-Tone: Frame your findings as constructive suggestions or open-ended questions. This encourages collaboration and avoids a purely critical tone. Examples:
-"Could we explore an alternative algorithm here to potentially improve performance?"
-"Would refactoring this logic into smaller functions enhance readability and maintainability?"
-Specificity:  Provide detailed explanations for each issue. This helps the original developer understand the reasoning and implement effective solutions.
-Prioritization: If possible, indicate the severity or potential impact of each issue (e.g., critical, high, medium, low). This helps prioritize fixes.
-No Issues:  If your review uncovers no significant areas for improvement, state "No major issues found. The code appears well-structured and adheres to good practices."
-'''
+    qry = get_access_secret('review_query')
+
+    if qry is None:
+        qry='''
+    INSTRUCTIONS:
+    You are an experienced software architect renowned for your ability to identify code quality issues, optimization opportunities, and adherence to best practices. Conduct a thorough code review of the provided codebase with the following focus:
+    Key Areas
+    Efficiency: Identify performance bottlenecks, redundant operations, or areas where algorithms and data structures could be improved for enhanced speed and resource usage.
+    Maintainability: Assess code readability, modularity, and the ease of future changes. Look for overly complex logic, tight coupling, or lack of proper code organization.
+    Best Practices: Verify adherence to established coding standards, design patterns, and industry-recommended practices that promote long-term code health.
+    Security: Scrutinize the code for potential vulnerabilities like improper input validation, susceptibility to injection attacks, or weaknesses in data handling.
+    Output Guidance
+    Structure:  Organize your findings by class and method names. This provides clear context for the issues and aids in refactoring. 
+    Tone: Frame your findings as constructive suggestions or open-ended questions. This encourages collaboration and avoids a purely critical tone. Examples:
+    "Could we explore an alternative algorithm here to potentially improve performance?"
+    "Would refactoring this logic into smaller functions enhance readability and maintainability?"
+    Specificity:  Provide detailed explanations for each issue. This helps the original developer understand the reasoning and implement effective solutions.
+    Prioritization: If possible, indicate the severity or potential impact of each issue (e.g., critical, high, medium, low). This helps prioritize fixes.
+    No Issues:  If your review uncovers no significant areas for improvement, state "No major issues found. The code appears well-structured and adheres to good practices."
+    '''
 
     # Load files as text into source variable
     source=source.format(format_files_as_string(context))

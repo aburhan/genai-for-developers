@@ -16,7 +16,7 @@ import click
 
 from devai.util.file_processor import get_text_files_contents
 from vertexai.language_models import CodeChatModel, ChatModel
-from devai.util.secret_manager import get_access_secret
+
 
 @click.command(name='with_msg')
 @click.option('-q', '--query', required=False, type=str, default="Provide a summary of this source code")
@@ -27,10 +27,8 @@ def with_msg(query, path):
     code_chat_model = CodeChatModel.from_pretrained("codechat-bison")
     # code_chat_model = CodeChatModel.from_pretrained("codechat-bison-32k")  
     # code_chat_model = ChatModel.from_pretrained("chat-bison@001")
-   
-    initial_prompt = get_access_secret('standard-prompt')
-    if initial_prompt is None:
-        initial_prompt='''
+    
+    initial_prompt='''
     I'm going to provide you with a series of files individually over multiple messages. 
     For each file do nothing other than reply with the file name.  
     I will signify I'm done sending file with the following string "===LOAD COMPLETE===". 
