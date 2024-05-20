@@ -65,8 +65,8 @@ CODE:
     code_chat_model = GenerativeModel(model_name)
     with telemetry.tool_context_manager(USER_AGENT):
         code_chat = code_chat_model.start_chat()
-    code_chat.send_message(qry)
-    response = code_chat.send_message(source)
+        code_chat.send_message(qry)
+        response = code_chat.send_message(source)
 
     click.echo(f"Response from Model: {response.text}")
 
@@ -114,8 +114,8 @@ CODE:
     code_chat_model = GenerativeModel(model_name)
     with telemetry.tool_context_manager(USER_AGENT):
         code_chat = code_chat_model.start_chat()
-    code_chat.send_message(qry)
-    response = code_chat.send_message(source)
+        code_chat.send_message(qry)
+        response = code_chat.send_message(source)
 
     click.echo(f"Response from Model: {response.text}")
 
@@ -152,8 +152,8 @@ CODE:
     code_chat_model = GenerativeModel(model_name)
     with telemetry.tool_context_manager(USER_AGENT):
         code_chat = code_chat_model.start_chat()
-    code_chat.send_message(qry)
-    response = code_chat.send_message(source)
+        code_chat.send_message(qry)
+        response = code_chat.send_message(source)
 
     click.echo(f"Response from Model: {response.text}")
 
